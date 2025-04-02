@@ -13,7 +13,7 @@
     <Authors>Jeppe Johansen</Authors>
     <Company>Nordic Space Link</Company>
     <PackageProjectUrl>https://nordicspacelink.com/</PackageProjectUrl>
-    <PackageLicenseExpression>GPLv3</PackageLicenseExpression>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <PackageTags>LibUHD</PackageTags>
     <Description>This library provides C# bindings for libuhd.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
