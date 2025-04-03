@@ -245,9 +245,9 @@ public class USRP : IDisposable
     public MetaRange GetFeRxFreqRange(int chan = 0) { using var x = new MetaRangeBuf(); Raise(uhd_usrp_get_fe_rx_freq_range(handle, (nuint)chan, x.Handle), handle, uhd_usrp_last_error); return x.Build(); }
     public bool GetRxLoExportEnabled(string name, int chan = 0) { Raise(uhd_usrp_get_rx_lo_export_enabled(handle, name, (nuint)chan, out var resultOut), handle, uhd_usrp_last_error); return resultOut; }
     public double GetRxLoFreq(string name, int chan = 0) { Raise(uhd_usrp_get_rx_lo_freq(handle, name, (nuint)chan, out var rxLoFreqOut), handle, uhd_usrp_last_error); return rxLoFreqOut; }
-    public double GetRxGain(string gainName, int chan = 0) { Raise(uhd_usrp_get_rx_gain(handle, (nuint)chan, gainName, out var gainOut), handle, uhd_usrp_last_error); return gainOut; }
+    public double GetRxGain(string gainName = ALL_GAINS, int chan = 0) { Raise(uhd_usrp_get_rx_gain(handle, (nuint)chan, gainName, out var gainOut), handle, uhd_usrp_last_error); return gainOut; }
     public double GetNormalizedRxGain(int chan = 0) { Raise(uhd_usrp_get_normalized_rx_gain(handle, (nuint)chan, out var gainOut), handle, uhd_usrp_last_error); return gainOut; }
-    public MetaRange GetRxGainRange(string name, int chan = 0) { using var x = new MetaRangeBuf(); Raise(uhd_usrp_get_rx_gain_range(handle, name, (nuint)chan, x.Handle), handle, uhd_usrp_last_error); return x.Build(); }
+    public MetaRange GetRxGainRange(string name = ALL_GAINS, int chan = 0) { using var x = new MetaRangeBuf(); Raise(uhd_usrp_get_rx_gain_range(handle, name, (nuint)chan, x.Handle), handle, uhd_usrp_last_error); return x.Build(); }
     public string[] GetRxLoNames(int chan = 0) { using var sv = new StringVector(); Raise(uhd_usrp_get_rx_lo_names(handle, (nuint)chan, ref sv.Handle), handle, uhd_usrp_last_error); return sv.ToArray(); }
     public string[] GetRxLoSources(string name, int chan = 0) { using var sv = new StringVector(); Raise(uhd_usrp_get_rx_lo_sources(handle, name, (nuint)chan, ref sv.Handle), handle, uhd_usrp_last_error); return sv.ToArray(); }
     public string[] GetRxGainNames(int chan = 0) { using var sv = new StringVector(); Raise(uhd_usrp_get_rx_gain_names(handle, (nuint)chan, ref sv.Handle), handle, uhd_usrp_last_error); return sv.ToArray(); }
@@ -265,7 +265,7 @@ public class USRP : IDisposable
     public void SetRxLoSource(string src, string name, int chan = 0) { Raise(uhd_usrp_set_rx_lo_source(handle, src, name, (nuint)chan), handle, uhd_usrp_last_error); }
     public void SetRxLoExportEnabled(bool enabled, string name, int chan = 0) { Raise(uhd_usrp_set_rx_lo_export_enabled(handle, enabled, name, (nuint)chan), handle, uhd_usrp_last_error); }
     public double SetRxLoFreq(double freq, string name, int chan = 0) { Raise(uhd_usrp_set_rx_lo_freq(handle, freq, name, (nuint)chan, out var coercedFreqOut), handle, uhd_usrp_last_error); return coercedFreqOut; }
-    public void SetRxGain(double gain, string gainName = "", int chan = 0) { Raise(uhd_usrp_set_rx_gain(handle, gain, (nuint)chan, gainName), handle, uhd_usrp_last_error); }
+    public void SetRxGain(double gain, string gainName = ALL_GAINS, int chan = 0) { Raise(uhd_usrp_set_rx_gain(handle, gain, (nuint)chan, gainName), handle, uhd_usrp_last_error); }
     public void SetNormalizedRxGain(double gain, int chan = 0) { Raise(uhd_usrp_set_normalized_rx_gain(handle, gain, (nuint)chan), handle, uhd_usrp_last_error); }
     public void SetRxAgc(bool enable, int chan = 0) { Raise(uhd_usrp_set_rx_agc(handle, enable, (nuint)chan), handle, uhd_usrp_last_error); }
     public void SetRxAntenna(string ant, int chan = 0) { Raise(uhd_usrp_set_rx_antenna(handle, ant, (nuint)chan), handle, uhd_usrp_last_error); }
@@ -282,8 +282,8 @@ public class USRP : IDisposable
     public MetaRange GetFeTxFreqRange(int chan = 0) { using var x = new MetaRangeBuf(); Raise(uhd_usrp_get_fe_tx_freq_range(handle, (nuint)chan, x.Handle), handle, uhd_usrp_last_error); return x.Build(); }
     public bool GetTxLoExportEnabled(string name, int chan = 0) { Raise(uhd_usrp_get_tx_lo_export_enabled(handle, name, (nuint)chan, out var resultOut), handle, uhd_usrp_last_error); return resultOut; }
     public double GetTxLoFreq(string name, int chan = 0) { Raise(uhd_usrp_get_tx_lo_freq(handle, name, (nuint)chan, out var txLoFreqOut), handle, uhd_usrp_last_error); return txLoFreqOut; }
-    public MetaRange GetTxGainRange(string name, int chan = 0) { using var x = new MetaRangeBuf(); Raise(uhd_usrp_get_tx_gain_range(handle, name, (nuint)chan, x.Handle), handle, uhd_usrp_last_error); return x.Build(); }
-    public double GetTxGain(string gainName = "", int chan = 0) { Raise(uhd_usrp_get_tx_gain(handle, (nuint)chan, gainName, out var gainOut), handle, uhd_usrp_last_error); return gainOut; }
+    public MetaRange GetTxGainRange(string name = ALL_GAINS, int chan = 0) { using var x = new MetaRangeBuf(); Raise(uhd_usrp_get_tx_gain_range(handle, name, (nuint)chan, x.Handle), handle, uhd_usrp_last_error); return x.Build(); }
+    public double GetTxGain(string gainName = ALL_GAINS, int chan = 0) { Raise(uhd_usrp_get_tx_gain(handle, (nuint)chan, gainName, out var gainOut), handle, uhd_usrp_last_error); return gainOut; }
     public double GetNormalizedTxGain(int chan = 0) { Raise(uhd_usrp_get_normalized_tx_gain(handle, (nuint)chan, out var gainOut), handle, uhd_usrp_last_error); return gainOut; }
     public double GetTxBandwidth(int chan = 0) { Raise(uhd_usrp_get_tx_bandwidth(handle, (nuint)chan, out var bandwidth_out), handle, uhd_usrp_last_error); return bandwidth_out; }
     public MetaRange GetTxBandwidthRange(int chan = 0) { using var x = new MetaRangeBuf(); Raise(uhd_usrp_get_tx_bandwidth_range(handle, (nuint)chan, x.Handle), handle, uhd_usrp_last_error); return x.Build(); }
@@ -302,7 +302,7 @@ public class USRP : IDisposable
     public void SetTxLoSource(string src, string name, int chan = 0) { Raise(uhd_usrp_set_tx_lo_source(handle, src, name, (nuint)chan), handle, uhd_usrp_last_error); }
     public void SetTxLoExportEnabled(bool enabled, string name, int chan = 0) { Raise(uhd_usrp_set_tx_lo_export_enabled(handle, enabled, name, (nuint)chan), handle, uhd_usrp_last_error); }
     public double SetTxLoFreq(double freq, string name, int chan = 0) { Raise(uhd_usrp_set_tx_lo_freq(handle, freq, name, (nuint)chan, out var coercedFreqOut), handle, uhd_usrp_last_error); return coercedFreqOut; }
-    public void SetTxGain(double gain, string gainName, int chan = 0) { Raise(uhd_usrp_set_tx_gain(handle, gain, (nuint)chan, gainName), handle, uhd_usrp_last_error); }
+    public void SetTxGain(double gain, string gainName = ALL_GAINS, int chan = 0) { Raise(uhd_usrp_set_tx_gain(handle, gain, (nuint)chan, gainName), handle, uhd_usrp_last_error); }
     public void SetNormalizedTxGain(double gain, int chan = 0) { Raise(uhd_usrp_set_normalized_tx_gain(handle, gain, (nuint)chan), handle, uhd_usrp_last_error); }
     public void SetTxAntenna(string ant, int chan = 0) { Raise(uhd_usrp_set_tx_antenna(handle, ant, (nuint)chan), handle, uhd_usrp_last_error); }
     public void SetTxBandwidth(double bandwidth, int chan = 0) { Raise(uhd_usrp_set_tx_bandwidth(handle, bandwidth, (nuint)chan), handle, uhd_usrp_last_error); }
