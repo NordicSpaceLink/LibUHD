@@ -26,12 +26,54 @@ public struct TuneRequest
     public string Args = "";
 }
 
-public struct StreamArgs(string cpu = "", string otw = "")
+public enum CpuFormat
 {
-    public string CpuFormat = cpu;
-    public string OtwFormat = otw;
+    FC64,
+    FC32,
+    SC16,
+    S8,
+}
+
+public enum OtwFormat
+{
+    Default,
+    SC16,
+    SC8,
+    SC12,
+}
+
+public struct StreamArgs
+{
+    public string CpuFormat;
+    public string OtwFormat;
     public string Args = "";
     public readonly List<int> Channels = [];
+
+    public StreamArgs(string cpu = "", string otw = "")
+    {
+        CpuFormat = cpu;
+        OtwFormat = otw;
+    }
+
+    public StreamArgs(CpuFormat cpu, OtwFormat otw = LibUHD.OtwFormat.Default)
+    {
+        CpuFormat = cpu switch 
+        {
+            LibUHD.CpuFormat.FC64 => "fc64",
+            LibUHD.CpuFormat.FC32 => "fc32",
+            LibUHD.CpuFormat.SC16 => "sc16",
+            LibUHD.CpuFormat.S8 => "s8",
+            _ => throw new NotImplementedException("Invalid CPU format")
+        };
+        OtwFormat = otw switch 
+        {
+            LibUHD.OtwFormat.Default => "",
+            LibUHD.OtwFormat.SC16 => "sc16",
+            LibUHD.OtwFormat.SC8 => "sc8",
+            LibUHD.OtwFormat.SC12 => "sc12",
+            _ => throw new NotImplementedException("Invalid OTW format")
+        };
+    }
 }
 
 public class USRP : IDisposable
