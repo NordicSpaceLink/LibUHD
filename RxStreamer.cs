@@ -35,13 +35,16 @@ public class RxStreamer : IDisposable
         }
     }
 
-    public unsafe int Receive<T>(Span<T> buffer, int samplesPerBuffer, RxMetadata metadata, double timeout = 0.1, bool onePacket = false)
+    public unsafe int Receive<T>(Span<T> buffer, int samplesPerBuffer, RxMetadata metadata, double timeout = 0.1, bool onePacket = false) where T : unmanaged
     {
         IntPtr* buffPtr = stackalloc IntPtr[1];
-        buffPtr[0] = new IntPtr(Unsafe.AsPointer(ref MemoryMarshal.GetReference(buffer)));
+        fixed (T* ptr = buffer)
+        {
+            buffPtr[0] = new IntPtr(ptr);
 
-        Raise(uhd_rx_streamer_recv(handle, ref buffPtr[0], (uint)samplesPerBuffer, ref metadata.Handle, timeout, onePacket, out var items_recvd), handle, uhd_rx_streamer_last_error);
-        return (int)items_recvd;
+            Raise(uhd_rx_streamer_recv(handle, ref buffPtr[0], (uint)samplesPerBuffer, ref metadata.Handle, timeout, onePacket, out var items_recvd), handle, uhd_rx_streamer_last_error);
+            return (int)items_recvd;
+        }
     }
 
     public void IssueStreamCommand(StreamCommand command)

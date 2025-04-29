@@ -35,13 +35,16 @@ public class TxStreamer : IDisposable
         }
     }
 
-    public unsafe int Send<T>(Span<T> buffer, int samplesPerBuffer, TxMetadata metadata, double timeout = 0.1)
+    public unsafe int Send<T>(ReadOnlySpan<T> buffer, int samplesPerBuffer, TxMetadata metadata, double timeout = 0.1) where T : unmanaged
     {
         IntPtr* buffPtr = stackalloc IntPtr[1];
-        buffPtr[0] = new IntPtr(Unsafe.AsPointer(ref MemoryMarshal.GetReference(buffer)));
 
-        Raise(uhd_tx_streamer_send(handle, ref buffPtr[0], (uint)samplesPerBuffer, ref metadata.Handle, timeout, out var items_sent), handle, uhd_tx_streamer_last_error);
-        return (int)items_sent;
+        fixed (T* ptr = buffer)
+        {
+            buffPtr[0] = new IntPtr(ptr);
+            Raise(uhd_tx_streamer_send(handle, ref buffPtr[0], (uint)samplesPerBuffer, ref metadata.Handle, timeout, out var items_sent), handle, uhd_tx_streamer_last_error);
+            return (int)items_sent;
+        }
     }
 
     public bool ReceiveAsyncMessage(ref AsyncMetadata metadata, double timeout = 0.1)
